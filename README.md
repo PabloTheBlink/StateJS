@@ -20,7 +20,7 @@ const counter = State(0); // counter.get(), counter.set(x), counter.listen(callb
 setInterval(() => counter.set(counter.get() + 1), 1000);
 
 // en cualquier otro controlador
-counter.listen((x, y) => console.log({ x, y }));
+const listener = counter.listen((x, y) => console.log({ x, y }));
 
 /*
     {"x":0,"y":1}
@@ -33,4 +33,7 @@ counter.listen((x, y) => console.log({ x, y }));
     {"x":7,"y":8}
     {"x":8,"y":9}
 */
+
+// Eliminar oyente
+counter.unlisten(listener);
 ```

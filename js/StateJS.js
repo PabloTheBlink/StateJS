@@ -15,7 +15,7 @@ export function State(currentValue) {
      * Lista de oyentes (listeners) que se ejecutarán cuando cambie el estado.
      * @type {Array<Function>}
      */
-    this.listeners = [];
+    this.listeners = {};
 
     /**
      * Establece un nuevo valor para el estado y notifica a los oyentes.
@@ -40,15 +40,25 @@ export function State(currentValue) {
      * @param {Function} callback - Función a ejecutar cuando cambie el estado.
      */
     this.listen = function (callback) {
-      this.listeners.push(callback);
+      const uid = crypto.randomUUID();
+      this.listeners[uid] = callback;
+      return uid;
+    };
+
+    /**
+     * Elimina un oyente (listener).
+     * @param {Function} callback - Función a ejecutar cuando cambie el estado.
+     */
+    this.unlisten = function (uid) {
+      delete this.listeners[uid];
     };
 
     /**
      * Notifica a los oyentes sobre el cambio en el estado.
      */
     this.notifyListeners = function (previous_value, new_value) {
-      for (let listener of this.listeners) {
-        listener(previous_value, new_value);
+      for (let uid in this.listeners) {
+        this.listeners[uid](previous_value, new_value);
       }
     };
   })();
