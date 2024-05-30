@@ -9,7 +9,8 @@ Con la función State, puedes crear y manipular fácilmente variables de estado.
 Uso básico:
 counter.get(): Obtiene el valor actual de la variable.
 counter.set(x): Actualiza el valor de la variable.
-counter.listen(callback(previous_value, new_value)): Permite escuchar cambios en la variable y ejecutar una función de devolución de llamada cuando se produce un cambio.
+counter.listen(callback(previous_value, new_value)): Permite escuchar cambios en la variable y ejecutar una función de devolución de llamada cuando se produce un cambio. Devuelve un identificador del evento.
+counter.unlisten(listener): Permite dejar de escuchar cambios en la variable eliminando el callback asociado.
 Ejemplo de uso práctico:
 
 ```javascript
@@ -20,18 +21,18 @@ const counter = State(0); // counter.get(), counter.set(x), counter.listen(callb
 setInterval(() => counter.set(counter.get() + 1), 1000);
 
 // en cualquier otro controlador
-const listener = counter.listen((x, y) => console.log({ x, y }));
+const listener = counter.listen((old_value, new_value) => console.log({ old_value, new_value }));
 
 /*
-    {"x":0,"y":1}
-    {"x":1,"y":2}
-    {"x":2,"y":3}
-    {"x":3,"y":4}
-    {"x":4,"y":5}
-    {"x":5,"y":6}
-    {"x":6,"y":7}
-    {"x":7,"y":8}
-    {"x":8,"y":9}
+    {"old_value":0,"new_value":1}
+    {"old_value":1,"new_value":2}
+    {"old_value":2,"new_value":3}
+    {"old_value":3,"new_value":4}
+    {"old_value":4,"new_value":5}
+    {"old_value":5,"new_value":6}
+    {"old_value":6,"new_value":7}
+    {"old_value":7,"new_value":8}
+    {"old_value":8,"new_value":9}
 */
 
 // Eliminar oyente
