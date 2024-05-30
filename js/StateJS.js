@@ -9,22 +9,22 @@ export function State(currentValue) {
      * Valor actual del estado.
      * @type {any}
      */
-    this.value = currentValue;
+    let value = currentValue;
 
     /**
      * Lista de oyentes (listeners) que se ejecutarán cuando cambie el estado.
      * @type {Array<Function>}
      */
-    this.listeners = {};
+    let listeners = {};
 
     /**
      * Establece un nuevo valor para el estado y notifica a los oyentes.
      * @param {any} new_value - Nuevo valor del estado.
      */
     this.set = function (new_value) {
-      if (this.value === new_value) return;
-      this.notifyListeners(this.value, new_value);
-      this.value = new_value;
+      if (value === new_value) return;
+      value = new_value;
+      notifyListeners(value, new_value);
     };
 
     /**
@@ -32,7 +32,7 @@ export function State(currentValue) {
      * @returns {any} - Valor actual del estado.
      */
     this.get = function () {
-      return this.value;
+      return value;
     };
 
     /**
@@ -41,7 +41,7 @@ export function State(currentValue) {
      */
     this.listen = function (callback) {
       const uid = crypto.randomUUID();
-      this.listeners[uid] = callback;
+      listeners[uid] = callback;
       return uid;
     };
 
@@ -50,15 +50,15 @@ export function State(currentValue) {
      * @param {Function} callback - Función a ejecutar cuando cambie el estado.
      */
     this.unlisten = function (uid) {
-      delete this.listeners[uid];
+      delete listeners[uid];
     };
 
     /**
      * Notifica a los oyentes sobre el cambio en el estado.
      */
-    this.notifyListeners = function (previous_value, new_value) {
-      for (let uid in this.listeners) {
-        this.listeners[uid](previous_value, new_value);
+    const notifyListeners = function (previous_value, new_value) {
+      for (let uid in listeners) {
+        listeners[uid](previous_value, new_value);
       }
     };
   })();
