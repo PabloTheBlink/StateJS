@@ -23,8 +23,9 @@ export function State(currentValue) {
      */
     this.set = function (new_value) {
       if (value === new_value) return;
+      const old_value = value;
       value = new_value;
-      notifyListeners(value, new_value);
+      notifyListeners(old_value, new_value);
     };
 
     /**
